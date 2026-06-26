@@ -1,149 +1,277 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>History - Building Care System Enterprise v3.5</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #f3f4f6;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>History - Building Care System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #f3f4f6;
+    }
+    .app-card {
+      width: 100%;
+      max-width: 420px;
+      height: 100vh;
+      max-height: 900px;
+      background: #1e5eff;
+      border-radius: 28px;
+      box-shadow: 0 20px 60px rgba(30,94,255,0.25);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      margin: 0 auto;
+    }
+    @media (max-width: 480px) {
+      .app-card { border-radius: 0; max-height: 100vh; }
+    }
+    .scroll-content {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .scroll-content::-webkit-scrollbar { display: none; }
+
+    .bottom-nav {
+      background: #fff;
+      border-top: 1px solid rgba(0,0,0,0.05);
+      padding: 10px 0 12px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .bottom-nav a {
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      font-size: 11px;
+      font-weight: 700;
+      transition: color 0.2s;
+    }
+    .bottom-nav a i { font-size: 20px; }
+
+    .status-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 6px;
+      display: inline-block;
+      letter-spacing: 0.3px;
+    }
+    .status-done { background: #dcfce7; color: #16a34a; }
+    .status-progress { background: #fef3c7; color: #d97706; }
+    .status-open { background: #fee2e2; color: #dc2626; }
+
+    .history-item {
+      transition: all 0.2s;
+      cursor: default;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .history-item:active { transform: scale(0.99); }
+
+    .img-placeholder {
+      width: 60px; height: 60px;
+      background: #f3f4f6;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #d1d5db;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .search-wrap {
+      background: #f3f4f6;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 12px;
+      flex: 1;
+    }
+    .search-wrap input {
+      background: transparent;
+      border: none;
+      width: 100%;
+      padding: 12px 0;
+      font-size: 14px;
+      color: #1f2937;
+    }
+    .search-wrap input::placeholder { color: #9ca3af; font-weight: 400; }
+    .search-wrap input:focus { outline: none; }
+
+    .filter-btn {
+      background: #eff3ff;
+      color: #1e5eff;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+      flex-shrink: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .filter-btn:active { background: #dbe3ff; transform: scale(0.95); }
+  </style>
 </head>
-<body class="p-4 md:p-8 flex items-center justify-center min-h-screen">
+<body>
+<div class="app-card">
+  <!-- Header -->
+  <div class="flex-shrink-0" style="background:#1e5eff;">
+    <div style="height:6px;"></div>
+    <div class="px-5 pb-4 pt-2 text-center text-white">
+      <h2 class="font-bold text-lg m-0">Riwayat Laporan</h2>
+    </div>
+  </div>
 
-    <!-- ============================================ -->
-    <!-- SINGLE CARD - HISTORY                        -->
-    <!-- ============================================ -->
-    <div class="w-full max-w-md bg-[#1e5eff] rounded-3xl shadow-xl overflow-hidden flex flex-col h-[850px]">
-
-        <!-- Header -->
-        <div class="h-6 w-full bg-[#1e5eff]"></div>
-        <div class="p-5 text-center text-white relative">
-            <h2 class="font-bold text-lg">Riwayat Laporan</h2>
-        </div>
-
-        <!-- Content -->
-        <div class="flex-1 bg-white rounded-t-[2rem] p-5 overflow-y-auto flex flex-col">
-
-            <!-- Search -->
-            <div class="flex gap-3 mb-5">
-                <div class="flex-1 bg-gray-100 rounded-xl flex items-center px-4 py-2.5 gap-3">
-                    <i class="fa-solid fa-magnifying-glass text-gray-400"></i>
-                    <input type="text" placeholder="Cari lokasi atau kategori..." class="bg-transparent w-full focus:outline-none text-sm text-gray-700">
-                </div>
-                <button class="bg-blue-50 text-[#1e5eff] p-3 rounded-xl hover:bg-blue-100 transition">
-                    <i class="fa-solid fa-sliders"></i>
-                </button>
-            </div>
-
-            <!-- List History -->
-            <div class="space-y-3 flex-1">
-                
-                <!-- Item 1 - DONE -->
-                <div class="border border-gray-100 rounded-2xl p-4 flex items-center justify-between shadow-sm bg-white hover:shadow-md transition">
-                    <div class="space-y-1">
-                        <span class="inline-block bg-green-100 text-green-600 font-bold text-[10px] px-2 py-0.5 rounded-md">DONE</span>
-                        <h4 class="font-bold text-sm text-gray-800 flex items-center gap-1.5 pt-1"><i class="fa-solid fa-bolt text-[#1e5eff] text-xs"></i> LISTRIK</h4>
-                        <p class="text-xs text-gray-500 font-medium">Ruang Meeting</p>
-                        <p class="text-[11px] text-gray-400 flex items-center gap-1"><i class="fa-regular fa-calendar"></i> 24 Juni 2026 • 10:30</p>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center text-gray-300"><i class="fa-regular fa-image text-lg"></i></div>
-                        <i class="fa-solid fa-chevron-right text-gray-300 text-sm"></i>
-                    </div>
-                </div>
-
-                <!-- Item 2 - PROGRESS -->
-                <div class="border border-gray-100 rounded-2xl p-4 flex items-center justify-between shadow-sm bg-white hover:shadow-md transition">
-                    <div class="space-y-1">
-                        <span class="inline-block bg-amber-100 text-amber-600 font-bold text-[10px] px-2 py-0.5 rounded-md">PROGRESS</span>
-                        <h4 class="font-bold text-sm text-gray-800 flex items-center gap-1.5 pt-1"><i class="fa-solid fa-snowflake text-[#1e5eff] text-xs"></i> AC</h4>
-                        <p class="text-xs text-gray-500 font-medium">Ruang HR</p>
-                        <p class="text-[11px] text-gray-400 flex items-center gap-1"><i class="fa-regular fa-calendar"></i> 23 Juni 2026 • 14:15</p>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center text-gray-300"><i class="fa-regular fa-image text-lg"></i></div>
-                        <i class="fa-solid fa-chevron-right text-gray-300 text-sm"></i>
-                    </div>
-                </div>
-
-                <!-- Item 3 - OPEN -->
-                <div class="border border-gray-100 rounded-2xl p-4 flex items-center justify-between shadow-sm bg-white hover:shadow-md transition">
-                    <div class="space-y-1">
-                        <span class="inline-block bg-red-100 text-red-600 font-bold text-[10px] px-2 py-0.5 rounded-md">OPEN</span>
-                        <h4 class="font-bold text-sm text-gray-800 flex items-center gap-1.5 pt-1"><i class="fa-solid fa-building text-[#1e5eff] text-xs"></i> KONDISI BANGUNAN</h4>
-                        <p class="text-xs text-gray-500 font-medium">Toilet Lt. 2</p>
-                        <p class="text-[11px] text-gray-400 flex items-center gap-1"><i class="fa-regular fa-calendar"></i> 22 Juni 2026 • 09:45</p>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center text-gray-300"><i class="fa-regular fa-image text-lg"></i></div>
-                        <i class="fa-solid fa-chevron-right text-gray-300 text-sm"></i>
-                    </div>
-                </div>
-
-                <!-- Item 4 - DONE -->
-                <div class="border border-gray-100 rounded-2xl p-4 flex items-center justify-between shadow-sm bg-white hover:shadow-md transition">
-                    <div class="space-y-1">
-                        <span class="inline-block bg-green-100 text-green-600 font-bold text-[10px] px-2 py-0.5 rounded-md">DONE</span>
-                        <h4 class="font-bold text-sm text-gray-800 flex items-center gap-1.5 pt-1"><i class="fa-solid fa-bolt text-[#1e5eff] text-xs"></i> LISTRIK</h4>
-                        <p class="text-xs text-gray-500 font-medium">Ruang Server</p>
-                        <p class="text-[11px] text-gray-400 flex items-center gap-1"><i class="fa-regular fa-calendar"></i> 21 Juni 2026 • 16:20</p>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center text-gray-300"><i class="fa-regular fa-image text-lg"></i></div>
-                        <i class="fa-solid fa-chevron-right text-gray-300 text-sm"></i>
-                    </div>
-                </div>
-
-                <!-- Item 5 - PROGRESS -->
-                <div class="border border-gray-100 rounded-2xl p-4 flex items-center justify-between shadow-sm bg-white hover:shadow-md transition">
-                    <div class="space-y-1">
-                        <span class="inline-block bg-amber-100 text-amber-600 font-bold text-[10px] px-2 py-0.5 rounded-md">PROGRESS</span>
-                        <h4 class="font-bold text-sm text-gray-800 flex items-center gap-1.5 pt-1"><i class="fa-solid fa-water text-[#1e5eff] text-xs"></i> PIPA BOCOR</h4>
-                        <p class="text-xs text-gray-500 font-medium">Kantin Lt. 1</p>
-                        <p class="text-[11px] text-gray-400 flex items-center gap-1"><i class="fa-regular fa-calendar"></i> 20 Juni 2026 • 08:00</p>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center text-gray-300"><i class="fa-regular fa-image text-lg"></i></div>
-                        <i class="fa-solid fa-chevron-right text-gray-300 text-sm"></i>
-                    </div>
-                </div>
-
-                <!-- Item 6 - OPEN -->
-                <div class="border border-gray-100 rounded-2xl p-4 flex items-center justify-between shadow-sm bg-white hover:shadow-md transition">
-                    <div class="space-y-1">
-                        <span class="inline-block bg-red-100 text-red-600 font-bold text-[10px] px-2 py-0.5 rounded-md">OPEN</span>
-                        <h4 class="font-bold text-sm text-gray-800 flex items-center gap-1.5 pt-1"><i class="fa-solid fa-plug text-[#1e5eff] text-xs"></i> STOP KONTAK</h4>
-                        <p class="text-xs text-gray-500 font-medium">Ruang Rapat Lt. 3</p>
-                        <p class="text-[11px] text-gray-400 flex items-center gap-1"><i class="fa-regular fa-calendar"></i> 19 Juni 2026 • 13:10</p>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center text-gray-300"><i class="fa-regular fa-image text-lg"></i></div>
-                        <i class="fa-solid fa-chevron-right text-gray-300 text-sm"></i>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- Navigation Bottom -->
-        <div class="bg-white border-t border-gray-100 py-3 grid grid-cols-2 text-center">
-            <a href="index.html" class="text-gray-400 flex flex-col items-center justify-center gap-1 hover:text-gray-600">
-                <i class="fa-solid fa-file-invoice text-lg"></i>
-                <span class="text-[11px] font-bold">Report</span>
-            </a>
-            <a href="history.html" class="text-[#1e5eff] flex flex-col items-center justify-center gap-1">
-                <i class="fa-solid fa-clock-rotate-left text-lg"></i>
-                <span class="text-[11px] font-bold">History</span>
-            </a>
-        </div>
+  <!-- Content -->
+  <div class="scroll-content bg-white rounded-t-2xl px-5 pt-5 pb-4">
+    <!-- Search -->
+    <div class="flex gap-3 mb-5">
+      <div class="search-wrap">
+        <i class="fa-solid fa-magnifying-glass text-gray-400"></i>
+        <input type="text" placeholder="Cari lokasi atau kategori..." />
+      </div>
+      <button class="filter-btn"><i class="fa-solid fa-sliders"></i></button>
     </div>
 
+    <!-- List -->
+    <div class="space-y-3">
+      <!-- Item 1 -->
+      <div class="history-item border border-gray-100 rounded-2xl p-4 flex items-center justify-between shadow-sm bg-white">
+        <div class="space-y-1">
+          <span class="status-badge status-done">DONE</span>
+          <h4 class="font-bold text-sm text-gray-800 flex items-center gap-1.5 pt-1"><i class="fa-solid fa-bolt text-[#1e5eff] text-xs"></i> LISTRIK</h4>
+          <p class="text-xs text-gray-500 font-medium">Ruang Meeting</p>
+          <p class="text-[11px] text-gray-400 flex items-center gap-1"><i class="fa-regular fa-calendar"></i> 24 Juni 2026 • 10:30</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="img-placeholder"><i class="fa-regular fa-image"></i></div>
+          <i class="fa-solid fa-chevron-right text-gray-300 text-sm"></i>
+        </div>
+      </div>
+
+      <!-- Item 2 -->
+      <div class="history-item border border-gray-100 rounded-2xl p-4 flex items-center justify-between shadow-sm bg-white">
+        <div class="space-y-1">
+          <span class="status-badge status-progress">PROGRESS</span>
+          <h4 class="font-bold text-sm text-gray-800 flex items-center gap-1.5 pt-1"><i class="fa-solid fa-snowflake text-[#1e5eff] text-xs"></i> AC</h4>
+          <p class="text-xs text-gray-500 font-medium">Ruang HR</p>
+          <p class="text-[11px] text-gray-400 flex items-center gap-1"><i class="fa-regular fa-calendar"></i> 23 Juni 2026 • 14:15</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="img-placeholder"><i class="fa-regular fa-image"></i></div>
+          <i class="fa-solid fa-chevron-right text-gray-300 text-sm"></i>
+        </div>
+      </div>
+
+      <!-- Item 3 -->
+      <div class="history-item border border-gray-100 rounded-2xl p-4 flex items-center justify-between shadow-sm bg-white">
+        <div class="space-y-1">
+          <span class="status-badge status-open">OPEN</span>
+          <h4 class="font-bold text-sm text-gray-800 flex items-center gap-1.5 pt-1"><i class="fa-solid fa-building text-[#1e5eff] text-xs"></i> KONDISI BANGUNAN</h4>
+          <p class="text-xs text-gray-500 font-medium">Toilet Lt. 2</p>
+          <p class="text-[11px] text-gray-400 flex items-center gap-1"><i class="fa-regular fa-calendar"></i> 22 Juni 2026 • 09:45</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="img-placeholder"><i class="fa-regular fa-image"></i></div>
+          <i class="fa-solid fa-chevron-right text-gray-300 text-sm"></i>
+        </div>
+      </div>
+
+      <!-- Item 4 -->
+      <div class="history-item border border-gray-100 rounded-2xl p-4 flex items-center justify-between shadow-sm bg-white">
+        <div class="space-y-1">
+          <span class="status-badge status-done">DONE</span>
+          <h4 class="font-bold text-sm text-gray-800 flex items-center gap-1.5 pt-1"><i class="fa-solid fa-bolt text-[#1e5eff] text-xs"></i> LISTRIK</h4>
+          <p class="text-xs text-gray-500 font-medium">Ruang Server</p>
+          <p class="text-[11px] text-gray-400 flex items-center gap-1"><i class="fa-regular fa-calendar"></i> 21 Juni 2026 • 16:20</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="img-placeholder"><i class="fa-regular fa-image"></i></div>
+          <i class="fa-solid fa-chevron-right text-gray-300 text-sm"></i>
+        </div>
+      </div>
+
+      <!-- Item 5 -->
+      <div class="history-item border border-gray-100 rounded-2xl p-4 flex items-center justify-between shadow-sm bg-white">
+        <div class="space-y-1">
+          <span class="status-badge status-progress">PROGRESS</span>
+          <h4 class="font-bold text-sm text-gray-800 flex items-center gap-1.5 pt-1"><i class="fa-solid fa-water text-[#1e5eff] text-xs"></i> PIPA BOCOR</h4>
+          <p class="text-xs text-gray-500 font-medium">Kantin Lt. 1</p>
+          <p class="text-[11px] text-gray-400 flex items-center gap-1"><i class="fa-regular fa-calendar"></i> 20 Juni 2026 • 08:00</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="img-placeholder"><i class="fa-regular fa-image"></i></div>
+          <i class="fa-solid fa-chevron-right text-gray-300 text-sm"></i>
+        </div>
+      </div>
+
+      <!-- Item 6 -->
+      <div class="history-item border border-gray-100 rounded-2xl p-4 flex items-center justify-between shadow-sm bg-white">
+        <div class="space-y-1">
+          <span class="status-badge status-open">OPEN</span>
+          <h4 class="font-bold text-sm text-gray-800 flex items-center gap-1.5 pt-1"><i class="fa-solid fa-plug text-[#1e5eff] text-xs"></i> STOP KONTAK</h4>
+          <p class="text-xs text-gray-500 font-medium">Ruang Rapat Lt. 3</p>
+          <p class="text-[11px] text-gray-400 flex items-center gap-1"><i class="fa-regular fa-calendar"></i> 19 Juni 2026 • 13:10</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="img-placeholder"><i class="fa-regular fa-image"></i></div>
+          <i class="fa-solid fa-chevron-right text-gray-300 text-sm"></i>
+        </div>
+      </div>
+    </div>
+
+    <div style="height:8px;"></div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <a href="index.html" class="text-gray-400">
+      <i class="fa-solid fa-file-invoice"></i>
+      <span>Report</span>
+    </a>
+    <a href="history.html" class="text-[#1e5eff]">
+      <i class="fa-solid fa-clock-rotate-left"></i>
+      <span>History</span>
+    </a>
+  </div>
+</div>
+
+<script>
+  // (Opsional) Filter / search dapat ditambahkan di sini
+  const searchInput = document.querySelector('.search-wrap input');
+  if (searchInput) {
+    searchInput.addEventListener('input', function() {
+      const keyword = this.value.toLowerCase().trim();
+      const items = document.querySelectorAll('.history-item');
+      items.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = text.includes(keyword) ? 'flex' : 'none';
+      });
+    });
+  }
+</script>
 </body>
 </html>
