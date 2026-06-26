@@ -1,126 +1,295 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Report - Building Care System Enterprise v3.5</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #f3f4f6;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Report - Building Care System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #f3f4f6;
+    }
+    .app-card {
+      width: 100%;
+      max-width: 420px;
+      height: 100vh;
+      max-height: 900px;
+      background: #1e5eff;
+      border-radius: 28px;
+      box-shadow: 0 20px 60px rgba(30,94,255,0.25);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      margin: 0 auto;
+    }
+    @media (max-width: 480px) {
+      .app-card { border-radius: 0; max-height: 100vh; }
+    }
+    .scroll-content {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+      /* hide scrollbar */
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .scroll-content::-webkit-scrollbar { display: none; }
+
+    .bottom-nav {
+      background: #fff;
+      border-top: 1px solid rgba(0,0,0,0.05);
+      padding: 10px 0 12px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .bottom-nav a {
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      font-size: 11px;
+      font-weight: 700;
+      transition: color 0.2s;
+    }
+    .bottom-nav a i { font-size: 20px; }
+
+    .priority-radio {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 14px;
+      border: 1.5px solid #e5e7eb;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #fff;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .priority-radio:active { transform: scale(0.98); }
+    .priority-radio.selected { border-color: #1e5eff; background: #f0f4ff; }
+    .priority-radio .dot {
+      width: 14px; height: 14px; border-radius: 50%;
+      flex-shrink: 0;
+      border: 2px solid #d1d5db;
+      transition: all 0.2s;
+    }
+    .priority-radio.selected .dot { border-color: #1e5eff; background: #1e5eff; }
+    .priority-radio .dot.green { background: #22c55e; border-color: #22c55e; }
+    .priority-radio .dot.amber { background: #f59e0b; border-color: #f59e0b; }
+    .priority-radio .dot.red { background: #ef4444; border-color: #ef4444; }
+
+    .cat-card {
+      transition: all 0.2s;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .cat-card:active { transform: scale(0.97); }
+
+    .photo-btn {
+      padding: 12px;
+      border-radius: 14px;
+      font-size: 13px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .photo-btn:active { transform: scale(0.96); }
+    .photo-btn.primary { background: #1e5eff; color: #fff; }
+    .photo-btn.secondary { background: #f3f4f6; color: #4b5563; }
+
+    .drop-zone {
+      border: 2px dashed #d1d5db;
+      border-radius: 14px;
+      padding: 28px 16px;
+      background: #fafbfc;
+      text-align: center;
+      color: #9ca3af;
+    }
+    .drop-zone i { font-size: 32px; display: block; margin-bottom: 6px; }
+    .drop-zone p { font-size: 12px; font-weight: 500; margin: 0; }
+    .drop-zone span { font-size: 11px; }
+
+    .submit-btn {
+      width: 100%;
+      background: #1e5eff;
+      color: #fff;
+      padding: 16px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 15px;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .submit-btn:active { transform: scale(0.97); background: #1a4fd6; }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #1e5eff !important;
+      box-shadow: 0 0 0 3px rgba(30,94,255,0.12);
+    }
+  </style>
 </head>
-<body class="p-4 md:p-8 flex items-center justify-center min-h-screen">
-
-    <!-- ============================================ -->
-    <!-- SINGLE CARD - REPORT                         -->
-    <!-- ============================================ -->
-    <div class="w-full max-w-md bg-[#1e5eff] rounded-3xl shadow-xl overflow-hidden flex flex-col h-[850px]">
-
-        <!-- Header -->
-        <div class="h-6 w-full bg-[#1e5eff]"></div>
-        <div class="p-5 flex items-center justify-between text-white">
-            <div class="flex items-center gap-4">
-                <button class="text-xl"><i class="fa-solid fa-bars"></i></button>
-                <div>
-                    <h2 class="font-bold text-lg flex items-center gap-1">Halo, Tukang Lapor <span>👋</span></h2>
-                    <p class="text-xs text-blue-200">General Affair</p>
-                </div>
-            </div>
-            <button class="text-lg"><i class="fa-solid fa-right-from-bracket"></i></button>
+<body>
+<div class="app-card">
+  <!-- Header -->
+  <div class="flex-shrink-0" style="background:#1e5eff;">
+    <div style="height:6px;"></div>
+    <div class="px-5 pb-4 pt-2 flex items-center justify-between text-white">
+      <div class="flex items-center gap-3">
+        <button class="text-xl leading-none" style="background:none;border:none;color:#fff;cursor:pointer;padding:4px;">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div>
+          <h2 class="font-bold text-lg flex items-center gap-1.5 m-0">Halo, Tukang Lapor <span>👋</span></h2>
+          <p class="text-xs text-blue-200 m-0">General Affair</p>
         </div>
+      </div>
+      <button class="text-lg leading-none" style="background:none;border:none;color:#fff;cursor:pointer;padding:4px;">
+        <i class="fa-solid fa-right-from-bracket"></i>
+      </button>
+    </div>
+  </div>
 
-        <!-- Content -->
-        <div class="flex-1 bg-white rounded-t-[2rem] p-6 overflow-y-auto space-y-5">
-            
-            <!-- Lokasi -->
-            <div>
-                <label class="block text-sm font-bold text-gray-800 mb-2">Lokasi Kerusakan</label>
-                <input type="text" placeholder="Contoh : Ruang Meeting" class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:border-[#1e5eff] text-sm">
-            </div>
-
-            <!-- Kategori -->
-            <div>
-                <label class="block text-sm font-bold text-gray-800 mb-2">Kategori Kerusakan</label>
-                <div class="grid grid-cols-2 gap-3 mb-3">
-                    <div class="border-2 border-[#1e5eff] rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer bg-blue-50/30 text-[#1e5eff]">
-                        <i class="fa-solid fa-bolt text-xl mb-1"></i>
-                        <span class="text-xs font-bold">LISTRIK</span>
-                    </div>
-                    <div class="border border-gray-200 rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer hover:border-gray-300 text-gray-600">
-                        <i class="fa-solid fa-snowflake text-xl mb-1"></i>
-                        <span class="text-xs font-bold">AC</span>
-                    </div>
-                </div>
-                <div class="border border-gray-200 rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer hover:border-gray-300 text-gray-600">
-                    <i class="fa-solid fa-building text-xl mb-1"></i>
-                    <span class="text-xs font-bold">KONDISI BANGUNAN</span>
-                </div>
-            </div>
-
-            <!-- Prioritas -->
-            <div>
-                <label class="block text-sm font-bold text-gray-800 mb-2">Prioritas</label>
-                <div class="space-y-2">
-                    <label class="flex items-center gap-3 w-full border border-green-500 bg-green-50/20 px-4 py-3 rounded-xl cursor-pointer">
-                        <span class="w-3 h-3 rounded-full bg-green-500"></span>
-                        <span class="text-sm font-bold text-gray-700">NORMAL</span>
-                    </label>
-                    <label class="flex items-center gap-3 w-full border border-gray-200 px-4 py-3 rounded-xl cursor-pointer hover:border-gray-300">
-                        <span class="w-3 h-3 rounded-full bg-amber-500"></span>
-                        <span class="text-sm font-bold text-gray-700">HIGH</span>
-                    </label>
-                    <label class="flex items-center gap-3 w-full border border-gray-200 px-4 py-3 rounded-xl cursor-pointer hover:border-gray-300">
-                        <span class="w-3 h-3 rounded-full bg-red-500"></span>
-                        <span class="text-sm font-bold text-gray-700">URGENT</span>
-                    </label>
-                </div>
-            </div>
-
-            <!-- Deskripsi -->
-            <div>
-                <label class="block text-sm font-bold text-gray-800 mb-2">Deskripsi Kerusakan</label>
-                <textarea rows="3" placeholder="Jelaskan kerusakan secara detail..." class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:border-[#1e5eff] text-sm resize-none"></textarea>
-                <span class="block text-right text-xs text-gray-400 mt-1">0 / 500 karakter</span>
-            </div>
-
-            <!-- Foto -->
-            <div>
-                <label class="block text-sm font-bold text-gray-800 mb-2">Foto Kerusakan</label>
-                <div class="grid grid-cols-2 gap-3 mb-3">
-                    <button class="bg-[#1e5eff] text-white py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 shadow-sm"><i class="fa-solid fa-camera"></i> Ambil Foto</button>
-                    <button class="bg-gray-100 text-gray-700 py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 hover:bg-gray-200"><i class="fa-solid fa-image"></i> Galeri</button>
-                </div>
-                <div class="border border-dashed border-gray-300 bg-gray-50 rounded-xl p-6 flex flex-col items-center justify-center text-center text-gray-400">
-                    <i class="fa-regular fa-image text-3xl mb-2"></i>
-                    <p class="text-xs font-semibold text-gray-500">Belum Ada Foto</p>
-                    <p class="text-[11px] text-gray-400">Ambil foto atau pilih dari galeri</p>
-                </div>
-            </div>
-
-            <!-- Submit -->
-            <button class="w-full bg-[#1e5eff] text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 shadow-md hover:bg-blue-700 transition">
-                <i class="fa-solid fa-paper-plane text-sm"></i> Kirim Report
-            </button>
-        </div>
-
-        <!-- Navigation Bottom -->
-        <div class="bg-white border-t border-gray-100 py-3 grid grid-cols-2 text-center">
-            <a href="index.html" class="text-[#1e5eff] flex flex-col items-center justify-center gap-1">
-                <i class="fa-solid fa-file-invoice text-lg"></i>
-                <span class="text-[11px] font-bold">Report</span>
-            </a>
-            <a href="history.html" class="text-gray-400 flex flex-col items-center justify-center gap-1 hover:text-gray-600">
-                <i class="fa-solid fa-clock-rotate-left text-lg"></i>
-                <span class="text-[11px] font-bold">History</span>
-            </a>
-        </div>
+  <!-- Content -->
+  <div class="scroll-content bg-white rounded-t-2xl px-5 pt-5 pb-4">
+    <!-- Lokasi -->
+    <div class="mb-4">
+      <label class="block text-sm font-bold text-gray-800 mb-1.5">Lokasi Kerusakan</label>
+      <input type="text" placeholder="Contoh : Ruang Meeting" class="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm transition" />
     </div>
 
+    <!-- Kategori -->
+    <div class="mb-4">
+      <label class="block text-sm font-bold text-gray-800 mb-1.5">Kategori Kerusakan</label>
+      <div class="grid grid-cols-2 gap-3 mb-3">
+        <div class="cat-card border-2 border-[#1e5eff] rounded-xl p-4 flex flex-col items-center justify-center bg-blue-50/30 text-[#1e5eff]">
+          <i class="fa-solid fa-bolt text-xl mb-1"></i>
+          <span class="text-xs font-bold">LISTRIK</span>
+        </div>
+        <div class="cat-card border border-gray-200 rounded-xl p-4 flex flex-col items-center justify-center text-gray-600">
+          <i class="fa-solid fa-snowflake text-xl mb-1"></i>
+          <span class="text-xs font-bold">AC</span>
+        </div>
+      </div>
+      <div class="cat-card border border-gray-200 rounded-xl p-4 flex flex-col items-center justify-center text-gray-600">
+        <i class="fa-solid fa-building text-xl mb-1"></i>
+        <span class="text-xs font-bold">KONDISI BANGUNAN</span>
+      </div>
+    </div>
+
+    <!-- Prioritas -->
+    <div class="mb-4">
+      <label class="block text-sm font-bold text-gray-800 mb-1.5">Prioritas</label>
+      <div class="space-y-2">
+        <div class="priority-radio selected">
+          <span class="dot green"></span>
+          <span class="text-sm font-bold text-gray-700">NORMAL</span>
+        </div>
+        <div class="priority-radio">
+          <span class="dot amber"></span>
+          <span class="text-sm font-bold text-gray-700">HIGH</span>
+        </div>
+        <div class="priority-radio">
+          <span class="dot red"></span>
+          <span class="text-sm font-bold text-gray-700">URGENT</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Deskripsi -->
+    <div class="mb-4">
+      <label class="block text-sm font-bold text-gray-800 mb-1.5">Deskripsi Kerusakan</label>
+      <textarea rows="3" placeholder="Jelaskan kerusakan secara detail..." class="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm resize-none transition"></textarea>
+      <span class="block text-right text-xs text-gray-400 mt-1">0 / 500 karakter</span>
+    </div>
+
+    <!-- Foto -->
+    <div class="mb-5">
+      <label class="block text-sm font-bold text-gray-800 mb-1.5">Foto Kerusakan</label>
+      <div class="grid grid-cols-2 gap-3 mb-3">
+        <button class="photo-btn primary"><i class="fa-solid fa-camera"></i> Ambil Foto</button>
+        <button class="photo-btn secondary"><i class="fa-solid fa-image"></i> Galeri</button>
+      </div>
+      <div class="drop-zone">
+        <i class="fa-regular fa-image"></i>
+        <p class="font-semibold text-gray-500">Belum Ada Foto</p>
+        <span>Ambil foto atau pilih dari galeri</span>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <button class="submit-btn"><i class="fa-solid fa-paper-plane text-sm"></i> Kirim Report</button>
+    <div style="height:8px;"></div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <a href="index.html" class="text-[#1e5eff]">
+      <i class="fa-solid fa-file-invoice"></i>
+      <span>Report</span>
+    </a>
+    <a href="history.html" class="text-gray-400">
+      <i class="fa-solid fa-clock-rotate-left"></i>
+      <span>History</span>
+    </a>
+  </div>
+</div>
+
+<script>
+  // Toggle prioritas
+  document.querySelectorAll('.priority-radio').forEach(el => {
+    el.addEventListener('click', function() {
+      document.querySelectorAll('.priority-radio').forEach(r => r.classList.remove('selected'));
+      this.classList.add('selected');
+    });
+  });
+
+  // Toggle kategori
+  document.querySelectorAll('.cat-card').forEach(el => {
+    el.addEventListener('click', function() {
+      document.querySelectorAll('.cat-card').forEach(c => {
+        c.classList.remove('border-[#1e5eff]', 'bg-blue-50/30', 'text-[#1e5eff]');
+        c.classList.add('border-gray-200', 'text-gray-600');
+      });
+      this.classList.add('border-[#1e5eff]', 'bg-blue-50/30', 'text-[#1e5eff]');
+      this.classList.remove('border-gray-200', 'text-gray-600');
+    });
+  });
+
+  // (Opsional) counter karakter
+  const textarea = document.querySelector('textarea');
+  const counter = document.querySelector('.text-right.text-xs');
+  if (textarea && counter) {
+    textarea.addEventListener('input', function() {
+      const len = this.value.length;
+      counter.textContent = len + ' / 500 karakter';
+    });
+  }
+</script>
 </body>
 </html>
